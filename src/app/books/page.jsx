@@ -2,8 +2,6 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import BookActions from "./BookActions";
-import ContainerPage from "../components/ContainerPage";
-import { Columns } from "lucide-react";
 
 export default async function AllBooksPage() {
   const books = await prisma.book.findMany({
@@ -23,7 +21,7 @@ export default async function AllBooksPage() {
             <Link href={`/books/${book.id}`}>
               <strong>{book.title}</strong> — {book.author}
             </Link>
-            <BookActions book={book} /> {/* Aqui passa o livro */}
+            <BookActions book={book} /> 
           </li>
         ))}
       </ul>

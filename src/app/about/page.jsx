@@ -1,6 +1,4 @@
 // app/about/page.js
-export const revalidate = 3600;
-
 export default function About() {
   return (
     <div style={{ padding: '2rem' }}>
