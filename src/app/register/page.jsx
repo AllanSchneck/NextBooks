@@ -6,7 +6,7 @@ import RegisterForm from "./RegisterForm";
 export default async function RegisterPage() {
   const cookieHeader = cookies().toString();
 
-  const res = await fetch("http://localhost:3000/api/auth/me", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/me`, {
     headers: { Cookie: cookieHeader },
     cache: "no-store",
   });
