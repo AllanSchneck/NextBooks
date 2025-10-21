@@ -1,22 +1,31 @@
-// app/register/page.jsx
-import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
+'use client';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
-  async function registerBook(formData) {
-    "use server";
-    const title = formData.get("title");
-    const author = formData.get("author");
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
+  const router = useRouter();
 
-    await prisma.book.create({ data: { title, author } });
-    redirect("/books");
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const res = await fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, author }),
+    });
+    if (res.ok) {
+      router.push('/books');
+    } else {
+      alert('Erro ao cadastrar livro');
+    }
   }
 
   return (
-    <form action={registerBook} style={{display:"flex",flexDirection:"column",gap:".04rem",alignItems:"center",textAlign:"center"}}>
-      <input style={{backgroundColor:"azure",color:"black",padding:"1rem"}} name="title" placeholder="Título" required /><br/>
-      <input style={{backgroundColor:"azure",color:"black", padding:"1rem"}} name="author" placeholder="Autor" required /><br/>
-      <button type="submit" style={{backgroundColor:"yellow",fontSize:"1.3rem", color:"black", padding:"0.8rem",fontFamily:"monospace"}}>Registrar</button>
+    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '.5rem', alignItems: 'center' }}>
+      <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Título" required />
+      <input value={author} onChange={e => setAuthor(e.target.value)} placeholder="Autor" required />
+      <button type="submit">Registrar</button>
     </form>
   );
 }
